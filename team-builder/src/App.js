@@ -3,6 +3,8 @@ import { v4 as uuid } from 'uuid'
 import logo from './logo.svg';
 import './App.css';
 import Form from './Form'
+import axios from 'axios';
+
 
 const initialTeamMemberList = [
   {
@@ -54,19 +56,47 @@ const initialFormValues = {
 function App() {
   const [teamMembers, setTeamMembers] = useState(initialTeamMemberList)
   const [error, setError] = useState('')
+
   const [formValues, setFormValues] = useState(initialFormValues)
 
   const onInputChange = evt => {
+    const { name, value } = evt.target
 
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    })
   }
 
   const onSubmit = evt => {
+    evt.preventDefault()
+    if (!formValues.username || !formValues.email || !formValues.role) {
+      setError('MUST FILL OUT INFO')
+      return
+    }
+
+    const newTeamMember = {
+      id: uuid(),
+      username: formValues.username.trim(),
+      email: formValues.email.trim(),
+      role: formValues.role,
+    }
+
+    console.log(teamMembers)
+
+    axios.post('url',)
+
+    setTeamMembers(teamMembers => [newTeamMember, ...teamMembers])
+
+    setFormValues(initialFormValues)
 
   }
 
 
 
-  console.log(initialTeamMemberList)
+
+
+
   return (
     <div className="App">
       <Form
@@ -74,7 +104,15 @@ function App() {
         onInputChange={onInputChange}
         onSubmit={onSubmit}
       />
-      
+      <span style={{ color: 'red' }}>{error}</span>
+
+      {
+        teamMembers.map(teamMember => {
+          return (
+            <span>{teamMember.username}</span>
+          )
+        })
+      }
 
     </div>
   );
