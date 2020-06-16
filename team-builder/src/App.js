@@ -109,7 +109,10 @@ function App() {
       {
         teamMembers.map(teamMember => {
           return (
-            <span>{teamMember.username}</span>
+            <ul>
+              <li>{teamMember.username}</li>
+            </ul>
+
           )
         })
       }
